@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import Utilities.audio as audio_util
+import time
+import process
 import subprocess
 import librosa
 
@@ -18,7 +20,9 @@ class Interface:
 
         self.file_path = None
         self.player_process = None
-
+        self.t0 = None
+        self.event_index = 0
+        self.event_array = None
 
         self.frm = ttk.Frame(master, padding=25)
         self.frm.pack()
@@ -37,6 +41,7 @@ class Interface:
 
         self.status_label = ttk.Label(self.frm, text="Status: Waiting for audio")
         self.status_label.grid(row=2, column=0, columnspan=3)
+
 
     def load_audio(self):
         # Picking audio file by name
@@ -57,7 +62,7 @@ class Interface:
             self.status_label.config(text="Status: Please load audio first")
             return
 
-        # Placeholder for processing audio functionality
+        self.event_array = process.process_audio(self.file_path)
         self.audio_processed = True
         self.status_label.config(text="Status: Ready to Play Lightshow")
     
@@ -67,14 +72,43 @@ class Interface:
         
         if not self.audio_playing:
             self.audio_playing = True
+            # Starting audio playback
             self.player_process = audio_util.play_audio(self.file_path)
-            # Placeholder for playing lightshow functionality
+            # Starting lightshow functionality
+            self.event_checker()
             self.status_label.config(text="Status: Playing Lightshow")
             self.run_button.config(text="Stop Playback!")
         elif self.audio_playing:
             self.audio_playing = False
+            # Stopping audio playback
             audio_util.stop_audio(self.player_process)
-            # Placeholder for stopping lightshow functionality
+            # Lightshow functionality stops itself on next event check
             self.status_label.config(text="Status: Ready to Play Lightshow")
             self.run_button.config(text="Run It!")
+    
+    def event_checker(self):
+        if not self.audio_playing:
+            self.t0 = None
+            self.event_index = 0
+            return
+        elif self.event_array is None:
+            print("Error: No event array found")
+            return
+        else:
+            if self.t0 is None:
+                self.t0 = time.perf_counter()
+            t_elapsed = time.perf_counter() - self.t0
+            while (self.event_index < len(self.event_array) and
+                   self.event_array[self.event_index].time_stamp <= t_elapsed):
+                event = self.event_array[self.event_index]
+                print(f"Triggering event at {event.time_stamp}s: {event.event_type} with params {event.parameters}")
+                self.event_index += 1
+                # Here you would call the function to handle the event, e.g., trigger lights
+            self.master.after(100, self.event_checker)
+            pass
+
+    # def on_close(self):
+    #     if self.audio_playing:
+    #         audio_util.stop_audio(self.player_process)
+    #     self.master.destroy()
         
