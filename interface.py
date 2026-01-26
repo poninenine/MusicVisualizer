@@ -4,6 +4,7 @@ from tkinter import filedialog
 import Utilities.audio as audio_util
 import time
 import process
+import Utilities.serialComm as serialComm
 import subprocess
 import librosa
 
@@ -102,6 +103,7 @@ class Interface:
                    self.event_array[self.event_index].time_stamp <= t_elapsed):
                 event = self.event_array[self.event_index]
                 print(f"Triggering event at {event.time_stamp}s: {event.event_type} with params {event.parameters}")
+                serialComm.send_data_to_serial('COM3', b'k')
                 self.event_index += 1
                 # Here you would call the function to handle the event, e.g., trigger lights
             self.master.after(100, self.event_checker)

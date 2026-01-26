@@ -1,6 +1,6 @@
 import event
 
-def generate_demo_events(duration):
+def generate_demo_events(duration, bpm = 120):
     """
     Generates a list of demo events for testing purposes.
     
@@ -11,9 +11,9 @@ def generate_demo_events(duration):
         List[Event]: A list of Event objects representing demo lightshow events.
     """
     demo_events = []
-    interval = 1.0  # 1 second intervals
+    interval = 60.0 / bpm  # Calculate interval based on BPM
     
-    for t in range(0, int(duration), int(interval)):
+    for t in range(0, int(duration / interval)):
         # Alternate between 'flash' and 'color_change' events
         demo_events.append(event.Event(time_stamp=t*interval, event_type='kick', parameters={'intensity': 1.0}))
     
