@@ -10,6 +10,7 @@ int yellowPin = 9;  // Snare light
 void setup() {
   Serial.begin(9600);
   delay(1500);
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void blink(int pin) {
