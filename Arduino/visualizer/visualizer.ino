@@ -1,21 +1,22 @@
 
 // This code needs to read serial data and respond with lights accordingly
 
-// For now, we will just blink the onboard LED before extending functionality
+// There are three kinds of lights in this version, one each for click, kick, and snare
+int whitePin = 11;  // Click light
+int redPin = 10;  // Kick light
+int yellowPin = 9;  // Snare light
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
   delay(1500);
 }
 
-void blink() {
+void blink(int pin) {
   // Response upon receiving serial indicator
-  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+  analogWrite(pin, 255);  // turn the LED on (HIGH is the voltage level)
   delay(50);                      // wait
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+  analogWrite(pin, 0);   // turn the LED off by making the voltage LOW
   // delay(100); 
 }
 
@@ -27,12 +28,19 @@ void loop() {
     // read the incoming byte:
     incomingByte = Serial.read();
 
-    if (incomingByte == 'k') {
-      blink();
+    switch (incomingByte) {
+      case 'c':
+        blink(whitePin);
+        break;
+
+      case 'k':
+        blink(redPin);
+        break;
+
+      case 's':
+        blink(yellowPin);
+        break;
     }
 
-    // say what you got:
-    // Serial.print("I received: ");
-    // Serial.println(incomingByte, DEC);
   }
 }

@@ -11,4 +11,8 @@ def send_data_to_serial(port, data):
 
 # while True:
 #     send_data_to_serial('COM3', b'k')
-#     time.sleep(0.2)
+#     time.sleep(1)
+#     send_data_to_serial('COM3', b's')
+#     time.sleep(1)
+#     send_data_to_serial('COM3', b'p')
+#     time.sleep(1)

@@ -7,6 +7,7 @@ def process_audio(file_path):
     # Currently just creates an event on beat
     y, sr = librosa.load(file_path, sr=None)
     tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+    print(f"Audio tempo: {tempo} bpm")
     beat_timestamps = librosa.frames_to_time(beats, sr=sr)
 
     event_array = []
@@ -16,7 +17,7 @@ def process_audio(file_path):
     return event_array
 
 
-    # print(f"Audio tempo: {tempo} bpm")
+    print(f"Audio tempo: {tempo} bpm")
     # duration = librosa.get_duration(y=y, sr=sr)
     # print(f"Audio duration: {duration} seconds")
 
