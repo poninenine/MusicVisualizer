@@ -9,6 +9,7 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
   delay(1500);
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void blink() {
