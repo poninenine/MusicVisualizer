@@ -1,4 +1,13 @@
 import subprocess
+import sounddevice as sd
+
+
+# individual samples approach
+
+
+
+
+# ffmpeg approach
 
 def play_audio(file_path):
     return subprocess.Popen(
